@@ -2,7 +2,7 @@
 #include "ui_MainWindow.h"
 
 #include "BeamItemModel.h"
-#include "ParticleView.h"
+#include "ScatteringScene.h"
 
 #include <QDebug>
 #include <QMessageBox>
@@ -118,10 +118,10 @@ void MainWindow::SetInputPrecisions()
 
 void MainWindow::SetParticleView()
 {
-	particleView = new ParticleView(this);
+//	particleView = new MyGLWidget(this);
 	ui->widget_particleView->setLayout(new QGridLayout());
 	QGridLayout *lo = (QGridLayout*)ui->widget_particleView->layout();
-	lo->addWidget(particleView, 6, 0, 1, 4);
+//	lo->addWidget(particleView, 6, 0, 1, 4);
 
 	UpdateScene();
 }
@@ -269,7 +269,7 @@ void MainWindow::LoadSession()
 	}
 
 #ifdef _DEBUG // DEB
-	ui->lineEdit_fromFile->setText("out0_mbs.dat");
+	ui->lineEdit_fromFile->setText("sphere.dat");
 	ui->doubleSpinBox_sizeIndex->setValue(50);
 	ui->radioButton_fromFile->setChecked(true);
 #endif
@@ -311,7 +311,7 @@ void MainWindow::AcceptSettings()
 
 void MainWindow::UpdateScene()
 {
-	particleView->setDrawLocalAxes(ui->checkBox_localAxes->isChecked());
+	particleView->scene->setDrawLocalAxes(ui->checkBox_localAxes->isChecked());
 	SetParticle();
 
 	Angle3d rotAngle = GetRotateAngle();
@@ -333,7 +333,8 @@ void MainWindow::UpdateScene()
 
 	bool drawNumbers = ui->checkBox_numbers->isChecked();
 	bool drawAxes = ui->checkBox_globalAxes->isChecked();
-	particleView->DrawScene(scene, drawNumbers, drawAxes);
+//	particleView->DrawScene(scene, drawNumbers, drawAxes);
+//	particleView->update();
 }
 
 void MainWindow::FillParticleTypes()

@@ -105,7 +105,7 @@ public:
 	void SetScattering(const Point3f &incidentDir, int reflNum,
 					const Point3f &polarizationBasis);
 
-	QString RecoverTrack(long long id, int level);
+	QString RecoverTrack(IdType id, int level);
 	void ConvertCoordinates(QPolygonF &pol);
 
 	void RotatePoints(const Angle3d &angle, const std::vector<Point3f> &points,

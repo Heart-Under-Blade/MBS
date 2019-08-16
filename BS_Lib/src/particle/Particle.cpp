@@ -36,6 +36,7 @@ Facet *Particle::GetActualFacet(int i)
 
 void Particle::SetFromFile(const std::string &filename, double sizeIndex)
 {
+
 	std::ifstream pfile(filename, std::ios::in);
 
 	if (!pfile.is_open())
@@ -48,7 +49,7 @@ void Particle::SetFromFile(const std::string &filename, double sizeIndex)
 	char *buff = (char*)malloc(sizeof(char) * bufSize);
 
 	nElems = 0;
-	Facet *facet = &elems[nElems++].origin;
+	Facet *facet = &(elems[nElems++].origin);
 
 	char *ptr, *trash;
 
@@ -63,26 +64,22 @@ void Particle::SetFromFile(const std::string &filename, double sizeIndex)
 		pfile.getline(buff, bufSize);
 
 		ptr = strtok(buff, " ");
-		m_symmetry.beta = Angle3d::DegToRad(strtod(ptr, &trash));
+		m_symmetry.beta = Orientation::DegToRad(strtod(ptr, &trash));
 
 		ptr = strtok(NULL, " ");
-		m_symmetry.gamma = Angle3d::DegToRad(strtod(ptr, &trash));
+		m_symmetry.gamma = Orientation::DegToRad(strtod(ptr, &trash));
 	}
 
 	pfile.getline(buff, bufSize); // skip empty line
 
 	while (!pfile.eof()) // read vertices of facets
 	{
-#ifdef _DEBUG // DEB
-		if (nElems == 35)
-			int ff = 0;
-#endif
 		pfile.getline(buff, bufSize);
 		ptr = strtok(buff, " ");
 
 		if (strlen(buff) == 0)
 		{
-			facet = &elems[nElems++].origin;
+			facet = &(elems[nElems++].origin);
 			continue;
 		}
 
@@ -90,8 +87,7 @@ void Particle::SetFromFile(const std::string &filename, double sizeIndex)
 
 		while (ptr != NULL)
 		{
-			double value = strtod(ptr, &trash);
-			facet->arr[facet->nVertices].coordinates[c_i++] = value * sizeIndex;
+			facet->arr[facet->nVertices].coordinates[c_i++] = strtod(ptr, &trash);
 			ptr = strtok(NULL, " ");
 		}
 
@@ -101,7 +97,7 @@ void Particle::SetFromFile(const std::string &filename, double sizeIndex)
 	pfile.close();
 
 	// correction of number of facet
-	if (elems[nElems-1].origin.nVertices == 0)
+	while (elems[nElems-1].origin.nVertices == 0)
 	{
 		--nElems;
 	}
@@ -110,7 +106,7 @@ void Particle::SetFromFile(const std::string &filename, double sizeIndex)
 	Reset();
 	SetDefaultCenters();
 
-	if (IsNonConvex() || isAggregated)
+	if (m_isNonConvex || isAggregated)
 	{
 		for (int i = 0; i < nElems; ++i)
 		{

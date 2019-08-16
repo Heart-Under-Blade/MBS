@@ -6,7 +6,7 @@
 
 #define CLIP_RESULT_SINGLE 1
 
-#define MAX_FACET_NUM 256
+#define MAX_FACET_NUM 512
 #define ROT_MTR_RANK 3
 
 class Facet;

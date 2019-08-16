@@ -4,14 +4,14 @@
 #
 #-------------------------------------------------
 
-QT       += core gui charts opengl
+QT       += core gui widgets charts
 TEMPLATE = app
 CONFIG += c++11
 
 DESTDIR = ../bin
 #CONFIG+=wwwidgets
 
-LIBS += -lglu32 -lopengl32
+LIBS += -lopengl32 -lglu32 -lglut32cu
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -45,20 +45,27 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SRC = ../../BS_Lib/src
 include(../../BS_Lib/pro/MBS.pri)
 
-SOURCES += \
-    ../src/*.cpp \
-    ../src/ui/*.cpp
-
-HEADERS += \
-    ../src/*.h \
-    ../src/ui/*.h
-
 INCLUDEPATH += \
     ../src \
     ../src/ui
 
 FORMS += \
-		../src/ui/*.ui \
+        ../src/ui/*.ui
+#        ../src/ui/MainWindow.ui \
+#        ../src/ui/SettingsDialog.ui
+
+SOURCES += \
+    ../src/*.cpp \
+        ../src/ui/*.cpp
+#        ../src/ui/MainWindow.cpp \
+#        ../src/ui/SettingsDialog.cpp
+
+HEADERS += \
+    ../src/*.h \
+        ../src/ui/*.h
+#        ../src/ui/MainWindow.h \
+#        ../src/ui/SettingsDialog.h
+
 
 RESOURCES += \
-	icon.qrc
+    *.qrc

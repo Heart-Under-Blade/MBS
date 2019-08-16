@@ -60,16 +60,16 @@ void ParticleProxy::SetParticleFromFile(const QString &filename, int sizeIndex)
 	m_particle->Rotate(Angle3d(0, Angle3d::DegToRad(90), 0));
 }
 
-QString ParticleProxy::RecoverTrack(long long id, int level)
+QString ParticleProxy::RecoverTrack(IdType id, int level)
 {
 	QString track;
 	int coef = m_particle->nElems + 1;
 	std::vector<int> tmp_track;
 
-	int tmpId = id/coef;
+	IdType tmpId = id/coef;
 	for (int i = 0; i <= level; ++i)
 	{
-		int tmp = tmpId%coef;
+		int tmp = (tmpId%coef)/*.toInt()*/;
 		tmpId -= tmp;
 		tmpId /= coef;
 		tmp -= 1;

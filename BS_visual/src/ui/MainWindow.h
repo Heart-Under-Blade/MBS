@@ -4,12 +4,13 @@
 #include <QDialog>
 #include <QChartView>
 
+#include "MyGLWidget.h"
 #include "SettingsDialog.h"
 #include "ParticleProxy.h"
 #include "BeamDirectionChart.h"
 
 class BeamItemModel;
-class ParticleView;
+class ScatteringScene;
 
 namespace Ui {
 class MainWindow;
@@ -51,7 +52,7 @@ private:
 	QChartView *chartView;
 	SettingsDialog *settingsDialog;
 
-	ParticleView *particleView;
+	MyGLWidget *particleView;
 
 	char format;
 	QMap<QString, QVariant> state;

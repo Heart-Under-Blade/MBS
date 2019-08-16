@@ -451,7 +451,7 @@ void HandlerTracksGO::WriteMatricesToFile(string &destName)
 {
 	string dir = CreateFolder(destName);
 
-	for (int i = 0; i < m_tracksContrib.size(); ++i)
+	for (size_t i = 0; i < m_tracksContrib.size(); ++i)
 	{
 		if ((*m_tracks)[i].size != 0)
 		{
