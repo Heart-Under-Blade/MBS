@@ -15,12 +15,49 @@ void resizeCallback(int w, int h)
 	g_CurrentInstance->resize(w, h);
 }
 
+void motionCallback(int x, int y)
+{
+	g_CurrentInstance->motion(x, y);
+}
+
 void rotateCallback(int button, int state, int x, int y)
 {
-	g_CurrentInstance->resize(w, h);
+	g_CurrentInstance->rotate(button, state, x, y);
+}
+
+void MyGLWidget::rotate(int button, int state, int x, int y)
+{
+	m_downX = x;
+	m_downY = y;
+
+	isLmb = (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN);
+	isMmb = (button == GLUT_MIDDLE_BUTTON && state == GLUT_DOWN);
+}
+
+void MyGLWidget::motion(int x, int y)
+{
+	if (isLmb)
+	{
+		m_phi += (float)(x - m_downX)/4.0;
+		m_theta += (float)(m_downY - y)/4.0;
+	} // rotate
+
+	if (isMmb)
+	{
+		m_depth += (float)(m_downY - y) / 10.0;
+	} // scale
+
+	m_downX = x;
+	m_downY = y;
+
+	glutPostRedisplay();
 }
 
 MyGLWidget::MyGLWidget(const std::string &filename)
+	: m_theta(0),
+	  m_phi(0),
+	  isLmb(false),
+	  isMmb(false)
 {
 	m_particle = new Particle;
 	m_particle->SetFromFile(filename);
@@ -54,6 +91,7 @@ void MyGLWidget::display()
 	::glutDisplayFunc(::drawCallback);
 	::glutReshapeFunc(::resizeCallback);
 	::glutMouseFunc(::rotateCallback);
+	::glutMotionFunc(::motionCallback);
 //	glClear(GL_COLOR_BUFFER_BIT);
 	glClearDepth(1.0f);                   // Set background depth to farthest
 	glEnable(GL_DEPTH_TEST);   // Enable depth testing for z-culling
@@ -161,6 +199,7 @@ void MyGLWidget::draw()
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear color and depth buffers
 	glMatrixMode(GL_MODELVIEW);     // To operate on model-view matrix
+//	glLoadIdentity();
 
 //	Point3f lightSourcePoint(1, 1, 1);
 
@@ -168,6 +207,10 @@ void MyGLWidget::draw()
 	{
 		glLoadIdentity();
 		glTranslatef(0.0f, 0.0f, -7.0f);
+
+		glRotatef(-m_theta, 1.0, 0.0, 0.0);
+		glRotatef(m_phi, 0.0, 0.0, 1.0);
+
 		glBegin(GL_POLYGON);
 		glColor3f(0.0f, 0.0f, 1.0f);// blue
 //		glColor3f(0.6f, 0.6f, 0.6f);// grey
@@ -293,5 +336,5 @@ void MyGLWidget::draw()
 //	glEnd();   // Done drawing the pyramid
 
 	glutSwapBuffers();  // Swap the front and back frame buffers (double buffering)
-//	swapBuffers();
+	//	swapBuffers();
 }
